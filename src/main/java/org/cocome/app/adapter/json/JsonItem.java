@@ -1,15 +1,17 @@
 package org.cocome.app.adapter.json;
 
+import org.cocome.cloud.shop.inventory.store.ProductWrapper;
+
 public class JsonItem {
 
-    private Integer id;
+    private Long id;
     private String name;
     private String imageURL;
     private String description;
     private Double price;
-    private Integer amount;
+    private Long amount;
      
-	public JsonItem(Integer id, String name, String imageURL, String description, Double price, Integer amount) {
+	public JsonItem(Long id, String name, String imageURL, String description, Double price, Long amount) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -19,7 +21,11 @@ public class JsonItem {
 		this.amount = amount;
 	}
 	
-	public Integer getId() {
+	public JsonItem(ProductWrapper productWrapper) {
+		this(productWrapper.getID(), productWrapper.getName(), "http://pipsum.com/200x200.jpg", productWrapper.getDescription(), productWrapper.getSalesPrice(), productWrapper.getAmount());
+	}
+
+	public Long getId() {
 		return id;
 	}
 	public String getName() {
@@ -34,7 +40,7 @@ public class JsonItem {
 	public Double getPrice() {
 		return price;
 	}
-	public Integer getAmount() {
+	public Long getAmount() {
 		return amount;
 	}
 }

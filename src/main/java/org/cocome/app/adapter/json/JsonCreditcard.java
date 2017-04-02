@@ -5,6 +5,9 @@ public class JsonCreditcard {
 	private Integer id;
 	private String name;
 	private Integer pin;
+	
+	public JsonCreditcard() {
+	}
 
 	public JsonCreditcard(Integer id, String name, Integer pin) {
 		super();

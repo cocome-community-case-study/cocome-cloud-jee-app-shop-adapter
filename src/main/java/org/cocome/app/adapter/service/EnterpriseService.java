@@ -4,23 +4,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.cocome.app.adapter.json.JsonEnterprise;
 import org.cocome.app.adapter.json.JsonStore;
+import org.cocome.cloud.logic.stub.NotInDatabaseException_Exception;
+import org.cocome.cloud.shop.inventory.connection.EnterpriseQuery;
+import org.cocome.cloud.shop.inventory.connection.StoreQuery;
+import org.cocome.cloud.shop.inventory.enterprise.Enterprise;
+import org.cocome.cloud.shop.inventory.store.Store;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EnterpriseService {
 
-	public List<JsonEnterprise> getEnterprises() {
+	@Inject
+	EnterpriseQuery enterpriseQuery;
 
+	public List<JsonEnterprise> getEnterprises() throws NotInDatabaseException_Exception {
+		
 		List<JsonEnterprise> list = new ArrayList<>();
-
-		list.add(new JsonEnterprise("JsonEnterprise 123", Arrays.asList(new JsonStore("JsonStore 1"),
-				new JsonStore("JsonStore 2"), new JsonStore("JsonStore 3"))));
-		list.add(new JsonEnterprise("JsonEnterprise 456", Arrays.asList(new JsonStore("JsonStore 4"),
-				new JsonStore("JsonStore 5"), new JsonStore("JsonStore 6"))));
-		list.add(new JsonEnterprise("JsonEnterprise 789", Arrays.asList(new JsonStore("JsonStore 7"),
-				new JsonStore("JsonStore 8"), new JsonStore("JsonStore 9"))));
+		
+		for (Enterprise enterprise : enterpriseQuery.getEnterprises()) {
+			JsonEnterprise jsonEnterprise = new JsonEnterprise(enterprise.getName(),enterprise.getId());
+			for (Store store : enterpriseQuery.getStores(enterprise.getId())) {
+				jsonEnterprise.addStore(new JsonStore(store.getID(), store.getName(), store.getLocation()));
+			}
+			list.add(jsonEnterprise);
+		}
 
 		return list;
 	}
